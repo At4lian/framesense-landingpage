@@ -275,7 +275,7 @@ function UseCaseCard({
   return (
     <a
       href={href}
-      className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20 hover:bg-white/[0.07]"
+      className="group block h-full rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20 hover:bg-white/[0.07]"
     >
       <h3 className="text-base font-semibold text-white">{title}</h3>
       <p className="mt-2 text-sm text-zinc-300">{description}</p>
