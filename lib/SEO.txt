@@ -1,0 +1,224 @@
+2) Struktura webu (co indexovat) – minimum pro růst
+
+Doporučení: rozdělit “one-page landing” na samostatné URL, aby měl Google co rankovat (a interně se to dobře linkovalo). V návrhu projektu už s tím počítáte: marketing routy + pricing + features + docs + sitemap/robots. 
+
+project structure
+
+ 
+
+project structure
+
+Core money pages (BOFU)
+
+/features (obecně + benefit)
+
+/pricing
+
+/how-it-works
+
+/use-cases + podstránky:
+
+/use-cases/freelancers
+
+/use-cases/post-production
+
+/use-cases/video-production
+
+/use-cases/social-content
+
+/use-cases/tv-delivery (pokud míříte i na TV promo – v analýze je zmíněno) 
+
+QVCC - ANALÝZA
+
+Problem/feature pages (největší SEO páka)
+
+Každá stránka = 1 intent, 1 hlavní KW:
+
+/black-frame-detection (black frames)
+
+/freeze-frame-detection
+
+/silence-detection
+
+/loudness-checker-lufs (LUFS, peaks, EBU R128 – loudness je opakovaně v pitchi i docs) 
+framesense.io
+ 
+
+QVCC - ANALÝZA
+
+/video-spec-check (resolution, fps, codec/container, “spec mismatch”) 
+framesense.io
+
+“Docs/Resources” (TOFU, ale s konverzí)
+
+/docs (FAQ + onboarding)
+
+/docs/qc-presets + programaticky jednotlivé presety:
+
+/qc-presets/tv-1080p25
+
+/qc-presets/social-1080x1920
+
+/qc-presets/youtube-4k…
+
+Tohle je přesně “nahraj video → preset → report” flow. 
+
+QVCC - ANALÝZA
+
+3) Keyword clustery (co cílit) – v jazyce editorů
+
+Konkurence je často enterprise (Telestream Vidchecker, Interra Baton, QScan), drahá a “broadcast heavy”. 
+
+Návrh platformy VQCC pro automa…
+
+ 
+telestream.net
++2
+Marquise Technologies
++2
+
+To je šance: vy můžete vyhrát na jednoduchosti + rychlosti + srozumitelném reportu (bez broadcast žargonu). 
+framesense.io
+
+Doporučené clustery → stránky
+Cluster (intent)	Příklady dotazů	Cílová stránka
+“Problém v exportu”	black frame, freeze frame, silent audio	/black-frame-detection, /freeze-frame-detection, /silence-detection
+“Audio normy”	LUFS checker, loudness spikes, EBU R128	/loudness-checker-lufs + články
+“Delivery specs”	resolution mismatch, 25fps export, H.264/AAC spec	/video-spec-check + /docs/qc-presets
+“Produktová kategorie”	automated video QC, video quality control software	/features + /use-cases
+“Pro koho”	QC for editors, QC for freelancers, post production QC	/use-cases/*
+4) On-page šablona (Title/H1/Meta) – ať rankujeme i konvertujeme
+
+Na homepage teď máte super claim, jen bych do H1 / title přidal “who it’s for” (editors/filmmakers) a hlavní KW “automated video QC”. 
+framesense.io
+
+Doporučené šablony
+
+Homepage Title: FrameSense – Automated Video QC for Editors (Black Frames, Freezes, Loudness)
+
+Homepage H1: Automated, frame-accurate video QC for final exports
+
+Meta description: Scan exports for black frames, freezes, silence, loudness spikes and spec mismatches. Get a clear PASS/FAIL report with timecodes in minutes. 
+framesense.io
+
+Sekce, které bych doplnil (rychlé SEO win)
+
+“Built for freelancers, post-production & small studios” (přesně cílovka) 
+
+QVCC - ANALÝZA
+
+“Works great for: Premiere / Resolve workflows” (jen jako workflow mention, ne slib integrace)
+
+FAQ blok (5–8 otázek) + FAQ schema
+
+5) Technické SEO (Next.js / SaaS) – checklist
+
+Z návrhu architektury už máte připravené správné věci: sitemap route + robots route. 
+
+project structure
+
+Nastavení:
+
+Jedna kanonická doména: máte redirect na www (good) – jen pohlídat canonical tagy všude. 
+framesense.io
+
+Indexace:
+
+marketing stránky: index
+
+app/dashboard (pokud existuje): typicky noindex (aby se neindexovaly /reports apod.)
+
+Sitemap:
+
+rozdělit na marketing + blog/docs (ať se rychleji crawlne)
+
+Robots.txt:
+
+povolit / a bloknout privátní routy (pokud jsou)
+
+Schema.org (minimálně):
+
+Organization
+
+WebSite
+
+SoftwareApplication
+
+FAQPage (na homepage a docs)
+
+Core Web Vitals:
+
+hlídat LCP (hero), obrázky (Next Image), JS bloat
+
+Tracking minimum:
+
+Google Search Console (domain property)
+
+GA4 + definovat conversion event: join_waitlist_submit, pricing_cta_click, signup_click
+
+Bing Webmaster Tools (levné extra leady)
+
+6) Obsahový plán (8 týdnů), který přivede freelancery
+
+V analýze máte i doporučení jít do edukace (“why QC matters” + tutorialy). 
+
+Návrh platformy VQCC pro automa…
+
+Startovní balík 12 článků (TOFU → BOFU linky):
+
+Proč se black frame objeví po exportu (Premiere/Resolve) + jak to chytit
+
+Freeze frames: nejčastější příčiny ve finálním MP4
+
+LUFS pro reklamní spoty: praktický tahák (EBU R128)
+
+“Nahraj video → PASS/FAIL”: jak má vypadat QC report s timecody 
+
+QVCC - ANALÝZA
+
+QC checklist pro freelancera před odevzdáním (download lead magnet)
+
+Social deliverables: Reels/TikTok/Shorts – na co se nejčastěji zapomíná 
+
+QVCC - ANALÝZA
+
+Spec mismatch (25fps vs 30fps): kdy to klient fakt pozná
+
+Jak zrychlit kontrolu 10 verzí videa v kampani (workflow)
+
+Alternativy k enterprise QC (bez hejtění, jen “pro koho jsou”) 
+
+QVCC - ANALÝZA
+
+Co dělat, když je export tichý jen na části (silence segments)
+
+Jak nastavit QC presety pro klienty (docs/presets)
+
+“Delivery confidence”: jak snížit počet re-exportů (case-style)
+
+7) Linkbuilding & distribuce (tam, kde cílovka fakt je)
+
+Váš vlastní plán distribuce je trefný: FB skupiny, Discordy, LinkedIn, fóra. 
+
+QVCC - ANALÝZA
+
+
+SEO tohle miluje, když to uděláte přes užitečné zdroje (checklisty, presety, “QC guide”).
+
+Konkrétně:
+
+1× lead magnet: “QC checklist PDF” (email capture) → interně prolinkovat na feature pages
+
+3–5 guest postů / podcastů u komunit (postprodukce, video tvůrci)
+
+“Tool directory” zápisy (Product Hunt/Indie apod.) + 1 kvalitní launch článek
+
+8) KPI (co měřit první 60 dní)
+
+Indexované stránky v GSC (coverage)
+
+Impressions na clustery: black frame / freeze / LUFS
+
+CTR na homepage + feature pages
+
+Konverze: waitlist → signup → první upload (pokud je možné)

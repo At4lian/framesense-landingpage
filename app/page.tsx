@@ -263,6 +263,101 @@ function FeatureCard({
   );
 }
 
+function UseCaseCard({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20 hover:bg-white/[0.07]"
+    >
+      <h3 className="text-base font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-sm text-zinc-300">{description}</p>
+      <span className="mt-4 inline-flex text-sm text-indigo-300 group-hover:text-indigo-200">
+        View use case
+      </span>
+    </a>
+  );
+}
+
+const useCases = [
+  {
+    title: "Freelancers",
+    description: "Automated QC for solo editors shipping client deliverables.",
+    href: "/use-cases/freelancers",
+  },
+  {
+    title: "Post-production teams",
+    description: "Standardized QC across editors, versions, and client specs.",
+    href: "/use-cases/post-production",
+  },
+  {
+    title: "Video production",
+    description: "Catch export issues before clients spot them.",
+    href: "/use-cases/video-production",
+  },
+  {
+    title: "Social content",
+    description: "Fast QC for short-form and vertical deliverables.",
+    href: "/use-cases/social-content",
+  },
+  {
+    title: "TV delivery",
+    description: "Preset-driven QC for broadcast specs and loudness targets.",
+    href: "/use-cases/tv-delivery",
+  },
+] as const;
+
+const faqItems = [
+  {
+    question: "What does FrameSense check in a video export?",
+    answer:
+      "Black frames, freeze frames, silence, loudness spikes, and delivery spec mismatches with timecodes.",
+  },
+  {
+    question: "Who is FrameSense built for?",
+    answer:
+      "Editors, filmmakers, freelancers, post-production teams, and small studios.",
+  },
+  {
+    question: "How fast are QC checks?",
+    answer:
+      "Most exports finish in minutes, depending on file length and format.",
+  },
+  {
+    question: "Does FrameSense support LUFS loudness targets?",
+    answer: "Yes. It checks loudness targets such as LUFS and flags spikes.",
+  },
+  {
+    question: "Can I use presets for client delivery specs?",
+    answer:
+      "Yes. Choose a preset or customize thresholds, and FrameSense flags mismatches.",
+  },
+  {
+    question: "What do I get after a scan?",
+    answer: "A clear PASS/FAIL report with timecodes you can share.",
+  },
+] as const;
+
+const faqStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+
 function Step({
   number,
   title,
@@ -414,8 +509,10 @@ export default function Page() {
 
   const navItems = [
     { label: "Features", id: "features" },
+    { label: "Use cases", id: "use-cases" },
     { label: "How it works", id: "how-it-works" },
     { label: "Pricing", id: "pricing" },
+    { label: "FAQ", id: "faq" },
   ] as const;
 
   return (
@@ -453,17 +550,20 @@ export default function Page() {
 
           <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
             {navItems.map((item) => (
-              <button
+              <a
                 key={item.id}
-                type="button"
-                onClick={() => scrollToId(item.id)}
+                href={`/#${item.id}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  scrollToId(item.id);
+                }}
                 className={cx(
                   "text-sm text-zinc-300 hover:text-white",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
                 )}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
             <Button
               type="button"
@@ -511,10 +611,11 @@ export default function Page() {
           <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
-                <button
+                <a
                   key={item.id}
-                  type="button"
-                  onClick={() => {
+                  href={`/#${item.id}`}
+                  onClick={(event) => {
+                    event.preventDefault();
                     setMobileOpen(false);
                     scrollToId(item.id);
                   }}
@@ -524,7 +625,7 @@ export default function Page() {
                   )}
                 >
                   {item.label}
-                </button>
+                </a>
               ))}
               <Button
                 type="button"
@@ -550,20 +651,20 @@ export default function Page() {
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 pt-14 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:pt-20">
             <Reveal className="relative">
               <Badge className="border-white/10 bg-white/5 text-zinc-200">
-                Frame-accurate video QC
+                Automated video quality control
               </Badge>
 
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Catch export-breaking issues{" "}
+                Automated, frame-accurate video QC{" "}
                 <span className="bg-gradient-to-r from-indigo-300 to-fuchsia-200 bg-clip-text text-transparent">
-                  before your clients do.
+                  for final exports.
                 </span>
               </h1>
 
               <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
-                FrameSense automatically scans final video exports for black frames,
-                freezes, silence, loudness spikes, and spec mismatches—then generates a
-                clean report your team can trust.
+                FrameSense is automated video QC for editors, freelancers, and post-production
+                teams. Scan exports for black frames, freezes, silence, loudness spikes, and
+                spec mismatches, then get a clear PASS/FAIL report with timecodes in minutes.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -769,6 +870,40 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Use cases */}
+        <section
+          id="use-cases"
+          className="scroll-mt-24 border-y border-white/10 bg-white/[0.02]"
+        >
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+            <Reveal>
+              <div className="flex flex-col gap-3">
+                <Badge className="w-fit border-white/10 bg-white/5 text-zinc-200">
+                  Use cases
+                </Badge>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Built for freelancers, post-production, and small studios
+                </h2>
+                <p className="max-w-2xl text-base text-zinc-300">
+                  Automated video QC that fits editors and filmmakers shipping final exports
+                  every week.
+                </p>
+                <p className="text-sm text-zinc-400">
+                  Works great for: Premiere Pro and DaVinci Resolve workflows.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {useCases.map((useCase, index) => (
+                <Reveal key={useCase.href} delayMs={index * 80}>
+                  <UseCaseCard {...useCase} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* How it works */}
         <section id="how-it-works" className="scroll-mt-24 border-y border-white/10 bg-white/[0.02]">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -804,6 +939,16 @@ export default function Page() {
                     title="Get a clear PASS/FAIL report"
                     description="Review issues with timecodes, severity, and suggested next actions—then ship with confidence."
                   />
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-zinc-300">
+                    Need delivery presets?{" "}
+                    <a
+                      href="/docs/qc-presets"
+                      className="text-indigo-300 hover:text-indigo-200 hover:underline underline-offset-4"
+                    >
+                      Browse QC presets
+                    </a>
+                    .
+                  </div>
                 </div>
               </Reveal>
 
@@ -817,11 +962,46 @@ export default function Page() {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-3 text-sm text-zinc-200">
-                      <Bullet>Black frames & unintended fades</Bullet>
-                      <Bullet>Freeze frames / stuck media</Bullet>
-                      <Bullet>Silence segments & audio dropouts</Bullet>
-                      <Bullet>Loudness targets & peak checks</Bullet>
-                      <Bullet>Resolution / frame rate mismatches</Bullet>
+                      <Bullet>
+                        <a
+                          href="/black-frame-detection"
+                          className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
+                        >
+                          Black frames & unintended fades
+                        </a>
+                      </Bullet>
+                      <Bullet>
+                        <a
+                          href="/freeze-frame-detection"
+                          className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
+                        >
+                          Freeze frames / stuck media
+                        </a>
+                      </Bullet>
+                      <Bullet>
+                        <a
+                          href="/silence-detection"
+                          className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
+                        >
+                          Silence segments & audio dropouts
+                        </a>
+                      </Bullet>
+                      <Bullet>
+                        <a
+                          href="/loudness-checker-lufs"
+                          className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
+                        >
+                          Loudness targets & peak checks
+                        </a>
+                      </Bullet>
+                      <Bullet>
+                        <a
+                          href="/video-spec-check"
+                          className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
+                        >
+                          Resolution / frame rate mismatches
+                        </a>
+                      </Bullet>
                     </ul>
                   </CardContent>
                   <CardFooter className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -911,6 +1091,38 @@ export default function Page() {
           </div>
         </section>
 
+        {/* FAQ */}
+        <section id="faq" className="scroll-mt-24 border-t border-white/10">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+            <Reveal>
+              <div className="flex flex-col gap-3">
+                <Badge className="w-fit border-white/10 bg-white/5 text-zinc-200">FAQ</Badge>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Questions editors ask before delivery
+                </h2>
+                <p className="max-w-2xl text-base text-zinc-300">
+                  Short answers to the most common automated video QC questions.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
+              {faqItems.map((item, index) => (
+                <Reveal key={item.question} delayMs={index * 80}>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <h3 className="text-base font-semibold text-white">{item.question}</h3>
+                    <p className="mt-2 text-sm text-zinc-300">{item.answer}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+          />
+        </section>
+
         {/* Waitlist */}
         <section id="waitlist" className="scroll-mt-24 border-t border-white/10">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -952,7 +1164,7 @@ export default function Page() {
       {/* Footer */}
       <footer className="border-t border-white/10 bg-zinc-950/70">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-5">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3">
                 <div className="inline-flex size-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/90">
@@ -968,9 +1180,21 @@ export default function Page() {
             <FooterCol
               title="Product"
               links={[
-                { label: "Features", onClick: () => scrollToId("features") },
-                { label: "How it works", onClick: () => scrollToId("how-it-works") },
-                { label: "Pricing", onClick: () => scrollToId("pricing") },
+                { label: "Features", href: "/#features" },
+                { label: "Use cases", href: "/#use-cases" },
+                { label: "How it works", href: "/#how-it-works" },
+                { label: "Pricing", href: "/#pricing" },
+                { label: "FAQ", href: "/#faq" },
+              ]}
+            />
+            <FooterCol
+              title="Resources"
+              links={[
+                { label: "Docs", href: "/docs" },
+                { label: "QC presets", href: "/docs/qc-presets" },
+                { label: "Black frame detection", href: "/black-frame-detection" },
+                { label: "Loudness checker", href: "/loudness-checker-lufs" },
+                { label: "Video spec check", href: "/video-spec-check" },
               ]}
             />
             <FooterCol
@@ -1186,3 +1410,4 @@ function FooterCol({
     </div>
   );
 }
+
