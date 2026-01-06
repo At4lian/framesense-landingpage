@@ -1,5 +1,6 @@
 import MarketingLayout from "@/components/seo/marketing-layout";
 import { buildMetadata } from "@/lib/seo";
+import Link from "next/link";
 
 const title = "Automated Video QC Pricing";
 const description =
@@ -84,12 +85,12 @@ export default function Page() {
         <p className="text-base text-zinc-300">
           We can tailor presets, concurrency, and onboarding for studios with higher volume.
         </p>
-        <a
+        <Link
           href="/#waitlist"
           className="inline-flex text-sm text-indigo-300 hover:text-indigo-200 hover:underline underline-offset-4"
         >
           Talk to the team about Studio plans
-        </a>
+        </Link>
       </section>
     </MarketingLayout>
   );

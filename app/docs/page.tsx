@@ -1,5 +1,6 @@
 import MarketingLayout from "@/components/seo/marketing-layout";
 import { buildMetadata } from "@/lib/seo";
+import Link from "next/dist/client/link";
 
 const title = "Video QC Docs and Resources";
 const description =
@@ -93,12 +94,12 @@ export default function Page() {
           Reach out for onboarding guidance or ask about custom presets for your delivery
           workflow.
         </p>
-        <a
+        <Link
           href="/#waitlist"
           className="inline-flex text-sm text-indigo-300 hover:text-indigo-200 hover:underline underline-offset-4"
         >
           Join the waitlist to get early access support
-        </a>
+        </Link>
       </section>
 
       <section className="space-y-4">

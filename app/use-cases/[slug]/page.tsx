@@ -16,7 +16,7 @@ export function generateMetadata({
 }: {
   params: { slug: string };
 }): Metadata {
-  const page = useCasePages[params.slug];
+  const page = useCasePages[params.slug as keyof typeof useCasePages];
   if (!page) {
     return {};
   }
@@ -28,7 +28,7 @@ export function generateMetadata({
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const page = useCasePages[params.slug];
+  const page = useCasePages[params.slug as keyof typeof useCasePages];
   if (!page) {
     notFound();
   }

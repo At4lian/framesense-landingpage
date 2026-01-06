@@ -16,7 +16,7 @@ export function generateMetadata({
 }: {
   params: { slug: string };
 }): Metadata {
-  const page = problemPages[params.slug];
+  const page = problemPages[params.slug as keyof typeof problemPages];
   if (!page) {
     return {};
   }
@@ -28,7 +28,7 @@ export function generateMetadata({
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const page = problemPages[params.slug];
+  const page = problemPages[params.slug as keyof typeof problemPages];
   if (!page) {
     notFound();
   }

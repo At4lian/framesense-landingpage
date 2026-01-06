@@ -16,7 +16,7 @@ export function generateMetadata({
 }: {
   params: { slug: string };
 }): Metadata {
-  const page = qcPresetPages[params.slug];
+  const page = qcPresetPages[params.slug as keyof typeof qcPresetPages];
   if (!page) {
     return {};
   }
@@ -28,7 +28,7 @@ export function generateMetadata({
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const page = qcPresetPages[params.slug];
+  const page = qcPresetPages[params.slug as keyof typeof qcPresetPages];
   if (!page) {
     notFound();
   }
