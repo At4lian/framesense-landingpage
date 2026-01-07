@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import MarketingLayout from "@/components/seo/marketing-layout";
-import SeoSections from "@/components/seo/seo-sections";
-import { buildMetadata } from "@/lib/seo";
+import UseCasePage, { useCaseMetadata } from "@/components/seo/use-case-page";
 import { useCasePages } from "@/lib/seo-pages";
 
 export const dynamicParams = false;
@@ -16,31 +13,9 @@ export function generateMetadata({
 }: {
   params: { slug: string };
 }): Metadata {
-  const page = useCasePages[params.slug as keyof typeof useCasePages];
-  if (!page) {
-    return {};
-  }
-  return buildMetadata({
-    title: page.title,
-    description: page.description,
-    path: `/use-cases/${params.slug}`,
-  });
+  return useCaseMetadata(params.slug);
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const page = useCasePages[params.slug as keyof typeof useCasePages];
-  if (!page) {
-    notFound();
-  }
-
-  return (
-    <MarketingLayout
-      title={page.title}
-      intro={page.intro}
-      eyebrow={page.eyebrow}
-      ctas={page.ctas}
-    >
-      <SeoSections sections={page.sections} />
-    </MarketingLayout>
-  );
+  return <UseCasePage slug={params.slug} />;
 }
