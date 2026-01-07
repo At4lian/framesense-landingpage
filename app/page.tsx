@@ -411,16 +411,27 @@ function WaitlistForm() {
     try {
       setStatus("loading");
 
-      // TODO: Replace this with a real request:
-      // await fetch("/api/waitlist", { method: "POST", body: JSON.stringify({ email }) })
-      await new Promise((r) => setTimeout(r, 900));
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const payload = (await response.json().catch(() => null)) as
+        | { error?: string; message?: string }
+        | null;
+
+      if (!response.ok) {
+        throw new Error(payload?.error ?? "Something went wrong.");
+      }
 
       setStatus("success");
-      setMessage("You're in! We'll email you when early access opens.");
+      setMessage(payload?.message ?? "You're in! We'll email you when early access opens.");
       setEmail("");
-    } catch {
+    } catch (error) {
       setStatus("error");
-      setMessage("Something went wrong. Please try again.");
+      setMessage(
+        error instanceof Error ? error.message : "Something went wrong. Please try again."
+      );
     }
   }
 
