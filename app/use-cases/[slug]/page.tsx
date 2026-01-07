@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import UseCasePage, { useCaseMetadata } from "@/components/seo/use-case-page";
+import UseCasePage, { useCaseMetadata as getUseCaseMetadata } from "@/components/seo/use-case-page";
 import { useCasePages } from "@/lib/seo-pages";
 
 export const dynamicParams = false;
@@ -13,7 +13,7 @@ export function generateMetadata({
 }: {
   params: { slug: string };
 }): Metadata {
-  return useCaseMetadata(params.slug);
+  return getUseCaseMetadata(params.slug);
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
