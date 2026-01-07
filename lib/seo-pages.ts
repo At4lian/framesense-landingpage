@@ -544,6 +544,11 @@ export const marketingStaticRoutes = [
   "/pricing",
   "/how-it-works",
   "/use-cases",
+  "/about",
+  "/careers",
+  "/contact",
+  "/privacy",
+  "/terms",
 ];
 
 export const problemRoutes = Object.keys(problemPages).map((slug) => `/${slug}`);

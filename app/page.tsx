@@ -1200,9 +1200,9 @@ export default function Page() {
             <FooterCol
               title="Company"
               links={[
-                { label: "About", href: "#" },
-                { label: "Careers", href: "#" },
-                { label: "Contact", href: "#" },
+                { label: "About", href: "/about" },
+                { label: "Careers", href: "/careers" },
+                { label: "Contact", href: "/contact" },
               ]}
             />
           </div>
@@ -1211,13 +1211,13 @@ export default function Page() {
             <p>© {new Date().getFullYear()} FrameSense. All rights reserved.</p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="/privacy"
                 className="hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
               >
                 Privacy
               </a>
               <a
-                href="#"
+                href="/terms"
                 className="hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
               >
                 Terms
@@ -1410,4 +1410,3 @@ function FooterCol({
     </div>
   );
 }
-
