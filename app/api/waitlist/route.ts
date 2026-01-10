@@ -4,6 +4,18 @@ import { prisma } from "@/lib/prisma";
 export const runtime = "nodejs";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 5;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://framesense.app";
+const canonicalUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+const logoUrl = `${canonicalUrl}/FrameSense_Logo_PNG_ForBlackBGR.png`;
+
+type RateLimitEntry = { count: number; resetAt: number };
+const globalForRateLimit = globalThis as { waitlistRateLimit?: Map<string, RateLimitEntry> };
+const rateLimitStore =
+  globalForRateLimit.waitlistRateLimit ?? new Map<string, RateLimitEntry>();
+
+globalForRateLimit.waitlistRateLimit = rateLimitStore;
 
 function isValidEmail(value: unknown): value is string {
   return typeof value === "string" && EMAIL_REGEX.test(value.trim());
@@ -22,6 +34,9 @@ function buildEmailHtml(email: string) {
   const safeEmail = escapeHtml(email);
   return `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+      <a href="${canonicalUrl}" style="display: inline-block; margin-bottom: 16px;">
+        <img src="${logoUrl}" alt="FrameSense logo" width="160" height="35" style="display: block; border: 0; outline: none;" />
+      </a>
       <h1 style="font-size: 20px; margin: 0 0 12px;">You're on the FrameSense waitlist</h1>
       <p style="margin: 0 0 12px;">
         Thanks for joining! We will reach out when early access opens.
@@ -34,6 +49,31 @@ function buildEmailHtml(email: string) {
       </p>
     </div>
   `;
+}
+
+function getClientIp(req: Request) {
+  const forwardedFor = req.headers.get("x-forwarded-for");
+  if (forwardedFor) return forwardedFor.split(",")[0]?.trim() ?? "unknown";
+  return req.headers.get("x-real-ip") ?? "unknown";
+}
+
+function checkRateLimit(key: string) {
+  const now = Date.now();
+  const entry = rateLimitStore.get(key);
+
+  if (!entry || entry.resetAt <= now) {
+    const resetAt = now + RATE_LIMIT_WINDOW_MS;
+    rateLimitStore.set(key, { count: 1, resetAt });
+    return { ok: true, remaining: RATE_LIMIT_MAX - 1, resetAt };
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return { ok: false, remaining: 0, resetAt: entry.resetAt };
+  }
+
+  entry.count += 1;
+  rateLimitStore.set(key, entry);
+  return { ok: true, remaining: RATE_LIMIT_MAX - entry.count, resetAt: entry.resetAt };
 }
 
 export async function POST(req: Request) {
@@ -62,7 +102,31 @@ export async function POST(req: Request) {
     return Response.json({ error: "Invalid JSON payload." }, { status: 400 });
   }
 
-  const email = (body as { email?: string }).email?.trim();
+  const { email: rawEmail, company } = body as { email?: string; company?: string };
+  const email = rawEmail?.trim();
+
+  const ip = getClientIp(req);
+  const rateLimit = checkRateLimit(`waitlist:${ip}`);
+  if (!rateLimit.ok) {
+    const retryAfter = Math.max(1, Math.ceil((rateLimit.resetAt - Date.now()) / 1000));
+    return Response.json(
+      { error: "Too many requests. Please try again shortly." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": retryAfter.toString(),
+        },
+      }
+    );
+  }
+
+  const trap = typeof company === "string" ? company.trim() : "";
+  if (trap) {
+    return Response.json({
+      ok: true,
+      message: "You're in! We'll email you when early access opens.",
+    });
+  }
   if (!isValidEmail(email)) {
     return Response.json({ error: "Invalid email address." }, { status: 400 });
   }

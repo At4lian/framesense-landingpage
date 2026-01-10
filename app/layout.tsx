@@ -97,11 +97,18 @@ export const metadata: Metadata = {
     siteName: "FrameSense",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/FrameSense_Logo_PNG_ForBlackBGR.png",
+        alt: "FrameSense logo",
+      },
+    ],
   },
   twitter: {
     card: "summary",
     title: seoTitle,
     description: seoDescription,
+    images: ["/FrameSense_Logo_PNG_ForBlackBGR.png"],
   },
 };
 
@@ -150,6 +157,9 @@ export default function RootLayout({
           // JSON-LD for search engines and rich results.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <noscript>
+          <style>{".reveal{opacity:1 !important; transform:none !important;}"}</style>
+        </noscript>
         {children}
         <Analytics />
       </body>

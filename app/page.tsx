@@ -1,11 +1,11 @@
 // app/page.tsx
-"use client";
-
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Header } from "@/components/landing/header";
+import { Reveal } from "@/components/landing/reveal";
+import { WaitlistForm } from "@/components/landing/waitlist-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -18,75 +18,6 @@ import { Badge } from "@/components/ui/badge";
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
-}
-
-function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function useInView(options?: IntersectionObserverInit) {
-  const [inView, setInView] = React.useState(false);
-  const ref = React.useRef<HTMLElement | null>(null);
-
-  React.useEffect(() => {
-    if (inView) return;
-
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-    if (prefersReducedMotion) {
-      setInView(true);
-      return;
-    }
-
-    const node = ref.current;
-    if (!node) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) setInView(true);
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px", ...(options ?? {}) }
-    );
-
-    obs.observe(node);
-    return () => obs.disconnect();
-  }, [inView, options]);
-
-  const setRef = React.useCallback((node: HTMLElement | null) => {
-    ref.current = node;
-  }, []);
-
-  return { ref: setRef, inView };
-}
-
-function Reveal({
-  children,
-  className,
-  delayMs = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delayMs?: number;
-}) {
-  const { ref, inView } = useInView();
-  return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delayMs}ms` }}
-      className={cx(
-        "motion-reduce:transition-none motion-reduce:transform-none",
-        "transition-[opacity,transform] duration-700 ease-out",
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
 }
 
 type IconProps = React.SVGProps<SVGSVGElement> & { title?: string };
@@ -357,152 +288,7 @@ function Step({
   );
 }
 
-function WaitlistForm() {
-  const [email, setEmail] = React.useState("");
-  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">(
-    "idle"
-  );
-  const [message, setMessage] = React.useState<string>("");
-
-  const emailId = React.useId();
-  const helpId = React.useId();
-  const msgId = React.useId();
-
-  const isValidEmail = React.useMemo(() => {
-    const v = email.trim();
-    if (!v) return false;
-    // Simple, pragmatic email check (easy to replace with Zod later)
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }, [email]);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setMessage("");
-
-    if (!isValidEmail) {
-      setStatus("error");
-      setMessage("Please enter a valid email address.");
-      return;
-    }
-
-    try {
-      setStatus("loading");
-
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const payload = (await response.json().catch(() => null)) as
-        | { error?: string; message?: string }
-        | null;
-
-      if (!response.ok) {
-        throw new Error(payload?.error ?? "Something went wrong.");
-      }
-
-      setStatus("success");
-      setMessage(payload?.message ?? "You're in! We'll email you when early access opens.");
-      setEmail("");
-    } catch (error) {
-      setStatus("error");
-      setMessage(
-        error instanceof Error ? error.message : "Something went wrong. Please try again."
-      );
-    }
-  }
-
-  return (
-    <form onSubmit={onSubmit} className="w-full" aria-describedby={helpId}>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-        <div className="w-full">
-          <label htmlFor={emailId} className="sr-only">
-            Email address
-          </label>
-          <Input
-            id={emailId}
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder="you@company.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (status !== "idle") {
-                setStatus("idle");
-                setMessage("");
-              }
-            }}
-            aria-invalid={status === "error"}
-            aria-describedby={cx(helpId, message ? msgId : "")}
-            disabled={status === "loading"}
-            className={cx(
-              "h-11 bg-white/5 text-white placeholder:text-zinc-400",
-              "border-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950",
-              status === "error" && "border-rose-400/60 focus-visible:ring-rose-400"
-            )}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          disabled={status === "loading"}
-          className={cx(
-            "h-11 px-5",
-            "bg-indigo-500 text-white hover:bg-indigo-400",
-            "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-          )}
-        >
-          {status === "loading" ? "Sending…" : "Get early access"}
-        </Button>
-      </div>
-
-      <p id={helpId} className="mt-2 text-xs text-zinc-400">
-        No spam. Unsubscribe anytime.
-      </p>
-
-      <div
-        className="mt-3 min-h-[1.25rem] text-sm"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {message ? (
-          <p
-            id={msgId}
-            className={cx(
-              "inline-flex items-center gap-2 rounded-md px-2 py-1",
-              status === "success" && "bg-emerald-500/10 text-emerald-200",
-              status === "error" && "bg-rose-500/10 text-rose-200"
-            )}
-          >
-            <span
-              className={cx(
-                "inline-block size-1.5 rounded-full",
-                status === "success" && "bg-emerald-300",
-                status === "error" && "bg-rose-300"
-              )}
-              aria-hidden="true"
-            />
-            {message}
-          </p>
-        ) : null}
-      </div>
-    </form>
-  );
-}
-
 export default function Page() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const navItems = [
-    { label: "Features", id: "features" },
-    { label: "Use cases", id: "use-cases" },
-    { label: "How it works", id: "how-it-works" },
-    { label: "Pricing", id: "pricing" },
-    { label: "FAQ", id: "faq" },
-  ] as const;
-
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50">
       {/* Subtle background */}
@@ -522,117 +308,7 @@ export default function Page() {
       >
         Skip to content
       </a>
-
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center">
-            <Image
-              src="/FrameSense_Logo_PNG_ForBlackBGR.png"
-              alt="FrameSense logo"
-              width={182}
-              height={40}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-          </div>
-
-          <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`/#${item.id}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  scrollToId(item.id);
-                }}
-                className={cx(
-                  "text-sm text-zinc-300 hover:text-white",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
-                )}
-              >
-                {item.label}
-              </a>
-            ))}
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => {
-                // placeholder
-                // eslint-disable-next-line no-console
-                console.log("Login clicked");
-              }}
-              className="text-zinc-200 hover:bg-white/5 hover:text-white"
-            >
-              Login
-            </Button>
-          </nav>
-
-          <div className="flex items-center gap-2 md:hidden">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-nav"
-              className="text-zinc-200 hover:bg-white/5 hover:text-white"
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <svg viewBox="0 0 24 24" fill="none" className="size-5" aria-hidden="true">
-                <path
-                  d="M4 7h16M4 12h16M4 17h16"
-                  className="stroke-current"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </Button>
-          </div>
-        </div>
-
-        <div
-          id="mobile-nav"
-          className={cx(
-            "md:hidden overflow-hidden border-t border-white/10 bg-zinc-950/80 backdrop-blur",
-            mobileOpen ? "max-h-80" : "max-h-0"
-          )}
-        >
-          <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <a
-                  key={item.id}
-                  href={`/#${item.id}`}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setMobileOpen(false);
-                    scrollToId(item.id);
-                  }}
-                  className={cx(
-                    "w-full rounded-md px-3 py-2 text-left text-sm text-zinc-200 hover:bg-white/5 hover:text-white",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-                  )}
-                >
-                  {item.label}
-                </a>
-              ))}
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  setMobileOpen(false);
-                  // placeholder
-                  // eslint-disable-next-line no-console
-                  console.log("Login clicked");
-                }}
-                className="justify-start text-zinc-200 hover:bg-white/5 hover:text-white"
-              >
-                Login
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main id="content">
         {/* Hero */}
@@ -659,26 +335,24 @@ export default function Page() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button
-                  type="button"
-                  onClick={() => scrollToId("waitlist")}
+                  asChild
                   className={cx(
                     "h-11 px-6 bg-indigo-500 text-white hover:bg-indigo-400",
                     "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                   )}
                 >
-                  Join the waiting list
+                  <a href="#waitlist">Join the waiting list</a>
                 </Button>
 
                 <Button
-                  type="button"
+                  asChild
                   variant="outline"
-                  onClick={() => scrollToId("how-it-works")}
                   className={cx(
                     "h-11 px-6 border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white",
                     "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                   )}
                 >
-                  See how it works
+                  <a href="#how-it-works">See how it works</a>
                 </Button>
               </div>
 
@@ -942,14 +616,13 @@ export default function Page() {
             <Reveal delayMs={300}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button
-                  type="button"
-                  onClick={() => scrollToId("waitlist")}
+                  asChild
                   className={cx(
                     "h-11 px-6 bg-indigo-500 text-white hover:bg-indigo-400",
                     "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                   )}
                 >
-                  Get early access to advanced controls
+                  <a href="#waitlist">Get early access to advanced controls</a>
                 </Button>
                 <p className="text-xs text-zinc-400">
                   Pro/Agency controls are available in early access.
@@ -1098,12 +771,11 @@ export default function Page() {
                       Designed for speed and clarity—no broadcast-engineer jargon.
                     </p>
                     <Button
-                      type="button"
+                      asChild
                       variant="outline"
-                      onClick={() => scrollToId("waitlist")}
                       className="border-white/15 bg-white/5 text-white hover:bg-white/10"
                     >
-                      Join the waiting list
+                      <a href="#waitlist">Join the waiting list</a>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -1140,7 +812,7 @@ export default function Page() {
                     "Email notifications",
                   ]}
                   cta="Join waitlist"
-                  onCta={() => scrollToId("waitlist")}
+                  href="#waitlist"
                 />
               </Reveal>
 
@@ -1157,7 +829,7 @@ export default function Page() {
                     "Priority queue",
                   ]}
                   cta="Get early access"
-                  onCta={() => scrollToId("waitlist")}
+                  href="#waitlist"
                 />
               </Reveal>
 
@@ -1173,7 +845,7 @@ export default function Page() {
                     "Dedicated support",
                   ]}
                   cta="Contact"
-                  onCta={() => scrollToId("waitlist")}
+                  href="#waitlist"
                 />
               </Reveal>
             </div>
@@ -1421,7 +1093,7 @@ function PlanCard({
   blurb,
   features,
   cta,
-  onCta,
+  href,
   featured,
 }: {
   name: string;
@@ -1429,7 +1101,7 @@ function PlanCard({
   blurb: string;
   features: string[];
   cta: string;
-  onCta: () => void;
+  href: string;
   featured?: boolean;
 }) {
   return (
@@ -1469,8 +1141,7 @@ function PlanCard({
 
       <CardFooter>
         <Button
-          type="button"
-          onClick={onCta}
+          asChild
           className={cx(
             "w-full h-11",
             featured
@@ -1479,7 +1150,7 @@ function PlanCard({
             "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
           )}
         >
-          {cta}
+          <a href={href}>{cta}</a>
         </Button>
       </CardFooter>
     </Card>
@@ -1500,7 +1171,7 @@ function FooterCol({
   links,
 }: {
   title: string;
-  links: Array<{ label: string; href?: string; onClick?: () => void }>;
+  links: Array<{ label: string; href: string }>;
 }) {
   return (
     <div>
@@ -1508,22 +1179,12 @@ function FooterCol({
       <ul className="mt-3 space-y-2 text-sm">
         {links.map((l) => (
           <li key={l.label}>
-            {l.onClick ? (
-              <button
-                type="button"
-                onClick={l.onClick}
-                className="text-zinc-400 hover:text-zinc-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
-              >
-                {l.label}
-              </button>
-            ) : (
-              <a
-                href={l.href ?? "#"}
-                className="text-zinc-400 hover:text-zinc-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
-              >
-                {l.label}
-              </a>
-            )}
+            <a
+              href={l.href}
+              className="text-zinc-400 hover:text-zinc-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
+            >
+              {l.label}
+            </a>
           </li>
         ))}
       </ul>
