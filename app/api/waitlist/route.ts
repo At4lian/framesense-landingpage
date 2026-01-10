@@ -6,9 +6,13 @@ export const runtime = "nodejs";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://framesense.app";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 const canonicalUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
-const logoUrl = `${canonicalUrl}/FrameSense_Logo_PNG_ForBlackBGR.png`;
+const logoUrl =
+  process.env.EMAIL_LOGO_URL ??
+  (canonicalUrl ? `${canonicalUrl}/FrameSense_Logo_PNG_ForBlackBGR.png` : "");
 
 type RateLimitEntry = { count: number; resetAt: number };
 const globalForRateLimit = globalThis as { waitlistRateLimit?: Map<string, RateLimitEntry> };
@@ -32,11 +36,17 @@ function escapeHtml(value: string) {
 
 function buildEmailHtml(email: string) {
   const safeEmail = escapeHtml(email);
-  return `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
-      <a href="${canonicalUrl}" style="display: inline-block; margin-bottom: 16px;">
+  const logoHref = canonicalUrl || logoUrl;
+  const logoMarkup = logoUrl
+    ? `
+      <a href="${logoHref}" style="display: inline-block; margin-bottom: 16px;">
         <img src="${logoUrl}" alt="FrameSense logo" width="160" height="35" style="display: block; border: 0; outline: none;" />
       </a>
+    `
+    : "";
+  return `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+      ${logoMarkup}
       <h1 style="font-size: 20px; margin: 0 0 12px;">You're on the FrameSense waitlist</h1>
       <p style="margin: 0 0 12px;">
         Thanks for joining! We will reach out when early access opens.
