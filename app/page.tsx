@@ -2,6 +2,8 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -88,36 +90,6 @@ function Reveal({
 }
 
 type IconProps = React.SVGProps<SVGSVGElement> & { title?: string };
-
-function FrameSenseMark(props: IconProps) {
-  const { title = "FrameSense", ...rest } = props;
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      role="img"
-      aria-label={title}
-      fill="none"
-      {...rest}
-    >
-      <path
-        d="M7 5.5h10A1.5 1.5 0 0 1 18.5 7v10A1.5 1.5 0 0 1 17 18.5H7A1.5 1.5 0 0 1 5.5 17V7A1.5 1.5 0 0 1 7 5.5Z"
-        className="stroke-current"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M9 9h6v6H9V9Z"
-        className="stroke-current"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M5.5 10.5h-2M5.5 13.5h-2M20.5 10.5h-2M20.5 13.5h-2"
-        className="stroke-current"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 function IconBolt(props: IconProps) {
   return (
@@ -301,6 +273,11 @@ const useCases = [
     title: "Video production",
     description: "Catch export issues before clients spot them.",
     href: "/use-cases/video-production",
+  },
+  {
+    title: "Agencies & brand teams",
+    description: "QC for campaign variants, client specs, and multi-platform delivery.",
+    href: "/use-cases/agencies",
   },
   {
     title: "Social content",
@@ -549,14 +526,15 @@ export default function Page() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="inline-flex size-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/90">
-              <FrameSenseMark className="size-5" />
-            </div>
-            <span className="text-sm font-semibold tracking-tight">FrameSense</span>
-            <Badge variant="secondary" className="ml-2 hidden border-white/10 bg-white/5 text-zinc-200 sm:inline-flex">
-              Beta
-            </Badge>
+          <div className="flex items-center">
+            <Image
+              src="/FrameSense_Logo_PNG_ForBlackBGR.png"
+              alt="FrameSense logo"
+              width={182}
+              height={40}
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </div>
 
           <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
@@ -662,20 +640,21 @@ export default function Page() {
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 pt-14 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:pt-20">
             <Reveal className="relative">
               <Badge className="border-white/10 bg-white/5 text-zinc-200">
-                Automated video quality control
+                AI video quality control
               </Badge>
 
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Automated, frame-accurate video QC{" "}
+                AI-powered, frame-accurate video QC{" "}
                 <span className="bg-gradient-to-r from-indigo-300 to-fuchsia-200 bg-clip-text text-transparent">
                   for final exports.
                 </span>
               </h1>
 
               <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
-                FrameSense is automated video QC for editors, freelancers, and post-production
-                teams. Scan exports for black frames, freezes, silence, loudness spikes, and
-                spec mismatches, then get a clear PASS/FAIL report with timecodes in minutes.
+                FrameSense is an AI video checker and AI video control platform for editors,
+                freelancers, and post-production teams. Scan exports for black frames,
+                freezes, silence, loudness spikes, and spec mismatches, then get a clear
+                PASS/FAIL report with timecodes in minutes.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -758,9 +737,13 @@ export default function Page() {
                       <p className="text-xs text-zinc-400">00:00 → 00:30</p>
                     </div>
                     <div className="mt-3 space-y-2">
+                       <MiniIssue
+                        severity="Critical"
+                        time="00:18.07"
+                        text="On-screen text grammar issue: &quot;Your welcome&quot; -&gt; &quot;You&apos;re welcome&quot;"
+                      />
                       <MiniIssue severity="Warning" time="00:12.48" text="Silence segment detected (2.1s)" />
                       <MiniIssue severity="Info" time="00:00.00" text="Format: 1920×1080, 25fps, H.264/AAC" />
-                      <MiniIssue severity="Info" time="—" text="Integrated loudness: -15.2 LUFS" />
                     </div>
 
                     <div className="mt-4">
@@ -774,7 +757,9 @@ export default function Page() {
                   </div>
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
-                    <GhostChip icon={<IconScan className="size-4" />} text="Frame sampling + heuristics" />
+                    <GhostChip icon={<IconScan className="size-4" />} text="Review player" />
+                    <GhostChip icon={<IconWave className="size-4" />} text="Waveform + vectorscope" />
+                    <GhostChip icon={<IconReport className="size-4" />} text="AI text grammar check" />
                     <GhostChip icon={<IconReport className="size-4" />} text="Shareable report" />
                   </div>
                 </div>
@@ -881,6 +866,99 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Advanced controls */}
+        <section className="scroll-mt-24 border-y border-white/10 bg-white/[0.02]">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+            <Reveal>
+              <div className="flex flex-col gap-3">
+                <Badge className="w-fit border-white/10 bg-white/5 text-zinc-200">
+                  Advanced controls
+                </Badge>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Advanced AI video control for high-stakes delivery
+                </h2>
+                <p className="max-w-2xl text-base text-zinc-300">
+                  Beyond core QC, FrameSense adds AI controls that reduce re-exports,
+                  protect revenue, and keep teams shipping on time.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <Reveal delayMs={60}>
+                <ControlCard
+                  title="Video control quality"
+                  description="Broadcast-safe and artifact checks for the image itself."
+                  items={[
+                    "Legal range and gamut control (broadcast-safe luma/chroma)",
+                    "Interlacing and combing detection",
+                    "Letterbox and pillarbox detection",
+                    "Blur and out-of-focus detection",
+                    "Blockiness and compression artifacts",
+                    "Dead or stuck pixel + PSE flash safety checks",
+                  ]}
+                />
+              </Reveal>
+              <Reveal delayMs={120}>
+                <ControlCard
+                  title="Audio control quality"
+                  description="Deeper audio QA to prevent rejections and revisions."
+                  items={[
+                    "Loudness detail: momentary, short-term, integrated, LRA, true peak",
+                    "Phase correlation and mono compatibility checks",
+                    "Pops, clicks, DC offset, and noise floor flags",
+                    "Channel layout validation (L/R/C/LFE/dual mono)",
+                  ]}
+                />
+              </Reveal>
+              <Reveal delayMs={180}>
+                <ControlCard
+                  title="File integrity controls"
+                  description="Validate container, codec, and delivery timing."
+                  items={[
+                    "GOP and codec compliance (keyframe interval, profile, level)",
+                    "VFR/CFR control with timestamp discontinuities",
+                    "Dropped frame detection",
+                    "A/V sync drift detection",
+                    "HDR10/Dolby Vision metadata checks (MaxCLL/MaxFALL)",
+                  ]}
+                />
+              </Reveal>
+              <Reveal delayMs={240}>
+                <ControlCard
+                  title="Pro/Agency AI upgrades"
+                  description="High-end controls for teams shipping at scale."
+                  items={[
+                    "Version comparison diff with SSIM/PSNR/VMAF over time",
+                    "NLE marker export for Premiere/Resolve",
+                    "Custom QC presets with pass/fail rules",
+                    "Frame grab thumbnails for every issue",
+                    "AI on-screen text OCR + grammar check",
+                  ]}
+                />
+              </Reveal>
+            </div>
+
+            <Reveal delayMs={300}>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Button
+                  type="button"
+                  onClick={() => scrollToId("waitlist")}
+                  className={cx(
+                    "h-11 px-6 bg-indigo-500 text-white hover:bg-indigo-400",
+                    "focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                  )}
+                >
+                  Get early access to advanced controls
+                </Button>
+                <p className="text-xs text-zinc-400">
+                  Pro/Agency controls are available in early access.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* Use cases */}
         <section
           id="use-cases"
@@ -952,12 +1030,12 @@ export default function Page() {
                   />
                   <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-zinc-300">
                     Need delivery presets?{" "}
-                    <a
+                    <Link
                       href="/docs/qc-presets"
                       className="text-indigo-300 hover:text-indigo-200 hover:underline underline-offset-4"
                     >
                       Browse QC presets
-                    </a>
+                    </Link>
                     .
                   </div>
                 </div>
@@ -974,44 +1052,44 @@ export default function Page() {
                   <CardContent>
                     <ul className="space-y-3 text-sm text-zinc-200">
                       <Bullet>
-                        <a
+                        <Link
                           href="/black-frame-detection"
                           className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
                         >
                           Black frames & unintended fades
-                        </a>
+                        </Link>
                       </Bullet>
                       <Bullet>
-                        <a
+                        <Link
                           href="/freeze-frame-detection"
                           className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
                         >
                           Freeze frames / stuck media
-                        </a>
+                        </Link>
                       </Bullet>
                       <Bullet>
-                        <a
+                        <Link
                           href="/silence-detection"
                           className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
                         >
                           Silence segments & audio dropouts
-                        </a>
+                        </Link>
                       </Bullet>
                       <Bullet>
-                        <a
+                        <Link
                           href="/loudness-checker-lufs"
                           className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
                         >
                           Loudness targets & peak checks
-                        </a>
+                        </Link>
                       </Bullet>
                       <Bullet>
-                        <a
+                        <Link
                           href="/video-spec-check"
                           className="text-zinc-200 hover:text-white hover:underline underline-offset-4"
                         >
                           Resolution / frame rate mismatches
-                        </a>
+                        </Link>
                       </Bullet>
                     </ul>
                   </CardContent>
@@ -1119,8 +1197,8 @@ export default function Page() {
 
             <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
               {faqItems.map((item, index) => (
-                <Reveal key={item.question} delayMs={index * 80}>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <Reveal key={item.question} delayMs={index * 80} className="h-full">
+                  <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-5">
                     <h3 className="text-base font-semibold text-white">{item.question}</h3>
                     <p className="mt-2 text-sm text-zinc-300">{item.answer}</p>
                   </div>
@@ -1177,11 +1255,14 @@ export default function Page() {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-5">
             <div className="md:col-span-2">
-              <div className="flex items-center gap-3">
-                <div className="inline-flex size-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/90">
-                  <FrameSenseMark className="size-5" />
-                </div>
-                <span className="text-sm font-semibold tracking-tight text-white">FrameSense</span>
+              <div className="flex items-center">
+                <Image
+                  src="/FrameSense_Logo_PNG_ForBlackBGR.png"
+                  alt="FrameSense logo"
+                  width={190}
+                  height={42}
+                  className="h-10 w-auto object-contain"
+                />
               </div>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-400">
                 Automated, frame-accurate quality checks for video exports—so you can deliver faster, with fewer surprises.
@@ -1221,18 +1302,18 @@ export default function Page() {
           <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} FrameSense. All rights reserved.</p>
             <div className="flex gap-4">
-              <a
+              <Link
                 href="/privacy"
                 className="hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
               >
                 Privacy
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/terms"
                 className="hover:text-zinc-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
               >
                 Terms
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -1257,14 +1338,16 @@ function MiniIssue({
   time,
   text,
 }: {
-  severity: "Warning" | "Info";
+  severity: "Warning" | "Info" | "Critical";
   time: string;
   text: string;
 }) {
   const tone =
     severity === "Warning"
       ? "border-amber-400/20 bg-amber-500/10 text-amber-100"
-      : "border-white/10 bg-white/5 text-zinc-200";
+      : severity === "Critical"
+        ? "border-rose-400/30 bg-rose-500/10 text-rose-100"
+        : "border-white/10 bg-white/5 text-zinc-200";
 
   return (
     <div className={cx("flex items-start justify-between gap-3 rounded-xl border px-3 py-2", tone)}>
@@ -1303,6 +1386,32 @@ function Bullet({ children }: { children: React.ReactNode }) {
       <span className="mt-2 inline-flex size-1.5 shrink-0 rounded-full bg-indigo-300" aria-hidden="true" />
       <span>{children}</span>
     </li>
+  );
+}
+
+function ControlCard({
+  title,
+  description,
+  items,
+}: {
+  title: string;
+  description: string;
+  items: string[];
+}) {
+  return (
+    <Card className="h-full border-white/10 bg-white/5 backdrop-blur-sm">
+      <CardHeader className="space-y-2">
+        <CardTitle className="text-white">{title}</CardTitle>
+        <CardDescription className="text-zinc-300">{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ul className="space-y-2 text-sm text-zinc-200">
+          {items.map((item) => (
+            <Bullet key={item}>{item}</Bullet>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
   );
 }
 

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import type { SeoCta, SeoLink } from "@/lib/seo-pages";
 
 type MarketingLayoutProps = {
@@ -45,11 +46,15 @@ export default function MarketingLayout({
 
       <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <a
-            href="/"
-            className="text-sm font-semibold tracking-tight text-white"
-          >
-            FrameSense
+          <a href="/" className="flex items-center">
+            <Image
+              src="/FrameSense_Logo_PNG_ForBlackBGR.png"
+              alt="FrameSense logo"
+              width={182}
+              height={40}
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </a>
           <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
             {navLinks.map((link) => (

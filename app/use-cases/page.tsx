@@ -4,7 +4,7 @@ import { problemPages, useCasePages } from "@/lib/seo-pages";
 
 const title = "Video QC Use Cases for Editors";
 const description =
-  "Explore video QC use cases for freelancers, post-production teams, production companies, social content, and TV delivery.";
+  "Explore video QC use cases for freelancers, post-production teams, agencies, production companies, social content, and TV delivery.";
 
 export const metadata = buildMetadata({
   title,
@@ -16,7 +16,7 @@ export default function Page() {
   return (
     <MarketingLayout
       title={title}
-      intro="Pick the workflow that matches your team. FrameSense provides automated video QC for editors, freelancers, and post-production teams."
+      intro="Pick the workflow that matches your team. FrameSense provides AI video QC for editors, freelancers, agencies, and post-production teams."
       eyebrow="Use cases"
       ctas={[
         { label: "Join the waitlist", href: "/#waitlist", variant: "primary" },

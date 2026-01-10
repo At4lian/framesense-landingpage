@@ -31,10 +31,10 @@ export const problemPages = {
   "black-frame-detection": {
     title: "Black Frame Detection for Video QC",
     description:
-      "Automated black frame detection for video exports. Find unintended black frames with timecodes and clear PASS/FAIL reporting.",
+      "AI-powered black frame detection for video exports. Run a video black frames check with timecodes and clear PASS/FAIL reporting.",
     eyebrow: "Problem page",
     intro:
-      "Catch black frames and flash frames that slip in after export. FrameSense runs automated video QC and surfaces exact timecodes before you deliver.",
+      "Catch black frames and flash frames that slip in after export. FrameSense runs AI video quality control and surfaces exact timecodes before you deliver.",
     sections: [
       {
         title: "Why black frames happen after export",
@@ -69,10 +69,10 @@ export const problemPages = {
   "freeze-frame-detection": {
     title: "Freeze Frame Detection for Video QC",
     description:
-      "Detect freeze frames and stuck media in exports. Automated QC with timecodes and clear PASS/FAIL reports.",
+      "AI-powered freeze frame detection and stuck media checks in exports. Automated video QC with timecodes and clear PASS/FAIL reports.",
     eyebrow: "Problem page",
     intro:
-      "Find freeze frames caused by render glitches, missing frames, or dropped media. FrameSense pinpoints every stuck frame with timecodes.",
+      "Find freeze frames caused by render glitches, missing frames, or dropped media. FrameSense uses AI to pinpoint every stuck frame with timecodes.",
     sections: [
       {
         title: "Why freeze frames slip through",
@@ -106,10 +106,10 @@ export const problemPages = {
   "silence-detection": {
     title: "Silence Detection in Video Exports",
     description:
-      "Detect unexpected silence and audio dropouts in final exports with automated QC and timecodes.",
+      "AI-powered silence detection for video exports. Detect unexpected silence and audio dropouts with automated QC and timecodes.",
     eyebrow: "Problem page",
     intro:
-      "Silence segments ruin deliveries. FrameSense flags silent or near-silent audio ranges before you send the file.",
+      "Silence segments ruin deliveries. FrameSense uses AI to flag silent or near-silent audio ranges before you send the file.",
     sections: [
       {
         title: "Common causes of silence",
@@ -142,10 +142,10 @@ export const problemPages = {
   "loudness-checker-lufs": {
     title: "LUFS Loudness Checker for Video QC",
     description:
-      "Check LUFS loudness targets and peaks against delivery specs with automated video QC and timecodes.",
+      "AI-powered LUFS loudness checker for video QC. Check loudness targets and peaks against delivery specs with timecoded reports.",
     eyebrow: "Problem page",
     intro:
-      "Hit loudness targets like LUFS and EBU R128 without manual meter checks. FrameSense flags loudness spikes and outliers.",
+      "Hit loudness targets like LUFS and EBU R128 without manual meter checks. FrameSense uses AI to flag loudness spikes and outliers.",
     sections: [
       {
         title: "Why loudness compliance matters",
@@ -178,10 +178,10 @@ export const problemPages = {
   "video-spec-check": {
     title: "Video Spec Check for Delivery Compliance",
     description:
-      "Automated QC to verify resolution, frame rate, codec, and container against delivery specs.",
+      "AI-powered video spec check for delivery compliance. Verify resolution, frame rate, codec, and container against delivery specs.",
     eyebrow: "Problem page",
     intro:
-      "Detect spec mismatches like 25fps vs 30fps, wrong resolution, or incorrect codec before delivery.",
+      "Detect spec mismatches like 25fps vs 30fps, wrong resolution, or incorrect codec before delivery. FrameSense uses AI to catch them early.",
     sections: [
       {
         title: "Spec mismatches are common",
@@ -217,10 +217,10 @@ export const useCasePages = {
   freelancers: {
     title: "Video QC for Freelance Editors",
     description:
-      "Automated video QC for freelancers to catch black frames, freezes, silence, loudness spikes, and spec mismatches before delivery.",
+      "AI video QC for freelancers to catch black frames, freezes, silence, loudness spikes, and spec mismatches before delivery.",
     eyebrow: "Use case",
     intro:
-      "FrameSense helps freelance editors deliver clean exports quickly with automated checks and clear PASS/FAIL reports.",
+      "FrameSense helps freelance editors deliver clean exports quickly with AI-powered checks and clear PASS/FAIL reports.",
     sections: [
       {
         title: "Common freelancer risks",
@@ -259,10 +259,10 @@ export const useCasePages = {
   "post-production": {
     title: "Video QC for Post-production Teams",
     description:
-      "Standardize automated QC for post-production teams with presets, timecoded reports, and fast export checks.",
+      "AI-powered automated QC for post-production teams with presets, timecoded reports, and fast export checks.",
     eyebrow: "Use case",
     intro:
-      "Keep post-production deliveries consistent across editors, versions, and clients with automated video QC.",
+      "Keep post-production deliveries consistent across editors, versions, and clients with AI video QC.",
     sections: [
       {
         title: "Standardize quality across versions",
@@ -293,13 +293,54 @@ export const useCasePages = {
     ],
     ctas: defaultCtas,
   },
+  agencies: {
+    title: "Video QC for Agencies and Brand Teams",
+    description:
+      "AI video QC for agencies delivering campaign variants, client specs, and multi-platform exports.",
+    eyebrow: "Use case",
+    intro:
+      "Keep campaign deliverables consistent across versions and platforms with AI-powered video QC.",
+    sections: [
+      {
+        title: "Campaign delivery risks",
+        body:
+          "Multiple aspect ratios, client specs, and last-minute edits make it easy for issues to slip through.",
+        bullets: [
+          { text: "Many versions and cutdowns per campaign" },
+          { text: "Strict platform and client requirements" },
+          { text: "Tight approval windows" },
+        ],
+      },
+      {
+        title: "How FrameSense helps agencies",
+        body:
+          "Run AI video quality control across every export and share a clean report for faster sign-off.",
+        bullets: [
+          { text: "AI checks across variants and platforms" },
+          { text: "Timecoded issues for fast fixes" },
+          { text: "Shareable PASS/FAIL report for approvals" },
+        ],
+      },
+      {
+        title: "Recommended checks",
+        body: "Start with the highest-risk delivery issues.",
+        bullets: [
+          { text: "Video spec check", href: "/video-spec-check" },
+          { text: "Black frame detection", href: "/black-frame-detection" },
+          { text: "Silence detection", href: "/silence-detection" },
+          { text: "LUFS loudness checker", href: "/loudness-checker-lufs" },
+        ],
+      },
+    ],
+    ctas: defaultCtas,
+  },
   "video-production": {
     title: "Video QC for Video Production Companies",
     description:
-      "Automated video QC for production companies delivering multiple cuts and client specs.",
+      "AI video QC for production companies delivering multiple cuts and client specs.",
     eyebrow: "Use case",
     intro:
-      "Ship client-ready exports without last-minute surprises, even when you are delivering multiple formats.",
+      "Ship client-ready exports without last-minute surprises, even when you are delivering multiple formats, with AI-powered QC.",
     sections: [
       {
         title: "Reduce re-exports and client revisions",
@@ -332,10 +373,10 @@ export const useCasePages = {
   "social-content": {
     title: "Video QC for Social Content",
     description:
-      "Automated QC for social and short-form deliverables, catching spec mismatches, silence, and loudness issues.",
+      "AI-powered QC for social and short-form deliverables, catching spec mismatches, silence, and loudness issues.",
     eyebrow: "Use case",
     intro:
-      "Keep short-form exports compliant and fast with automated video QC built for high volume.",
+      "Keep short-form exports compliant and fast with AI video QC built for high volume.",
     sections: [
       {
         title: "Short-form delivery risks",
@@ -371,10 +412,10 @@ export const useCasePages = {
   "tv-delivery": {
     title: "QC for TV Delivery and Broadcast Specs",
     description:
-      "Automated QC for TV delivery with frame-accurate checks and loudness compliance monitoring.",
+      "AI-driven QC for TV delivery with frame-accurate checks and loudness compliance monitoring.",
     eyebrow: "Use case",
     intro:
-      "Meet TV delivery specs with automated checks, presets, and timecoded QC reporting.",
+      "Meet TV delivery specs with AI-powered checks, presets, and timecoded QC reporting.",
     sections: [
       {
         title: "Broadcast delivery pitfalls",

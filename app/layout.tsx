@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://framesense.app";
 const canonicalUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
 const seoTitle =
-  "FrameSense - Automated Video QC for Editors (Black Frames, Freezes, Loudness)";
+  "FrameSense - AI Video Quality Control for Editors (Black Frames, Freezes, Loudness)";
 const seoDescription =
-  "Scan exports for black frames, freezes, silence, loudness spikes and spec mismatches. Get a clear PASS/FAIL report with timecodes in minutes.";
+  "AI video quality control and AI video checker for exports. Scan for black frames, freezes, silence, loudness spikes, spec mismatches, and on-screen text issues. Get a clear PASS/FAIL report with timecodes in minutes.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(canonicalUrl),
@@ -28,8 +28,29 @@ export const metadata: Metadata = {
   },
   description: seoDescription,
   keywords: [
-    "video QC",
+    "AI video quality control",
+    "AI video QC",
+    "AI video checker",
+    "AI video control",
+    "video control",
+    "video control quality",
+    "AI on-screen text OCR",
+    "video text grammar check",
+    "broadcast safe gamut",
+    "interlacing detection",
+    "letterbox detection",
+    "pillarbox detection",
+    "compression artifact detection",
+    "macroblocking detection",
+    "A/V sync drift",
+    "HDR10 QC",
+    "Dolby Vision QC",
+    "VMAF video comparison",
+    "SSIM video comparison",
+    "PSNR video comparison",
+    "NLE marker export",
     "video quality control",
+    "video QC",
     "automated video QC",
     "video QC for editors",
     "video QC software",
@@ -38,6 +59,7 @@ export const metadata: Metadata = {
     "broadcast QC",
     "delivery spec checks",
     "video spec check",
+    "video black frames check",
     "black frame detection",
     "freeze frame detection",
     "silence detection",

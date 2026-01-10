@@ -1,0 +1,31 @@
+Video QC (image)
+
+- Legal range / gamut control: flags luma and chroma out of broadcast-safe limits.
+- Interlacing / combing detection: catches interlaced artifacts in progressive exports.
+- Letterbox / pillarbox detection: finds black bars where they should not be.
+- Blur / out-of-focus detection: flags soft shots (with false-positive controls).
+- Blockiness / compression artifacts: detects macroblocking via heuristics or AI.
+- Dead / stuck pixel detection: finds persistent bad pixels.
+- PSE / flash test: detects potentially epileptic flashing.
+- AI on-screen text QA: OCR + grammar check for titles and supers.
+
+Audio QC
+
+- Loudness detail: momentary, short-term, integrated, LRA, true peak, and out-of-tolerance segments.
+- Phase correlation / stereo issues: mono compatibility and phase warnings.
+- Pops / clicks, DC offset, noise floor: flags spikes, hum, and drift.
+- Channel layout checks: validates count and order (L/R/C/LFE/dual mono).
+
+File format & integrity control
+
+- GOP / codec compliance: keyframe interval, B-frames, profile, and level.
+- VFR / CFR control: timestamp discontinuities and dropped frames.
+- A/V sync drift: audio ahead/behind detection.
+- HDR checks: HDR10/Dolby Vision metadata, MaxCLL/MaxFALL.
+
+Pro/Agency upgrades
+
+- Version comparison (diff): SSIM/PSNR/VMAF over time, highlight worst moments.
+- NLE marker export: send report markers to Premiere/Resolve.
+- Custom QC presets: thresholds, tolerances, and pass/fail rules.
+- Frame grabs per issue: thumbnails in every report.
