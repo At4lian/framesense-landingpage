@@ -11,8 +11,7 @@ const siteUrl =
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 const canonicalUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
 const logoUrl =
-  process.env.EMAIL_LOGO_URL ??
-  (canonicalUrl ? `${canonicalUrl}/FrameSense_Logo_PNG_ForBlackBGR.png` : "");
+  process.env.EMAIL_LOGO_URL ?? "https://www.framesense.io/FrameSense_Logo_PNG_ForWhiteBGR.png";
 
 type RateLimitEntry = { count: number; resetAt: number };
 const globalForRateLimit = globalThis as { waitlistRateLimit?: Map<string, RateLimitEntry> };
